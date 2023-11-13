@@ -1,0 +1,143 @@
+{% extends "backstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}  {% endblock title %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'No permission' %}
+  
+<script language="javascript">
+
+  alert('您沒有使用者的權限喔！');
+
+</script>
+
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'failed' %}
+  
+<script language="javascript">
+
+  alert('有使用者有使用到這筆資料，所以不能刪除');
+
+</script>
+
+{% endif %}
+{% endwith %}
+
+<script>
+    $(document).ready(function(){
+        $("#keyword").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#product tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+&nbsp;
+&nbsp;
+<div class="d-flex justify-content-between container-xxl">
+    <div class="d-flex col-sm-4">
+        <span class="input-group-text" id="basic-addon1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </span>
+        <input class="form-control me-2" id="keyword" placeholder="搜尋消息" aria-label="Search">
+    </div>
+    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        新增消息
+    </button>
+</div> 
+    <!-- {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-success alert-dismissable" role="alert">
+       
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="close" style="float: right;">
+            <span aria-hidden="false" style="left: auto;">X</span> 
+        </button>
+            <p class="same_pname">
+             *商品名稱已存在，新增失敗*
+            </p>
+    </div>
+    {% endif %}
+    {% endwith %}     -->
+
+<!-- 改這裡 -->
+<form method="post" enctype=multipart/form-data action={{ url_for('manager.addnews') }}>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">新增消息</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputtitle" class="form-label">消息標題</label>
+                        <p class="mb-3">
+                            <input type="text" class="form-control" id="inputtitle" name="title" required>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputcontent" class="form-label">消息內文</label>
+                        <input type="text" class="form-control" id="inputcontent" name="content" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success" data-bs-toggle="modal" >確定新增</button>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</form>
+
+<br/>
+
+<div class="container-xxl">
+
+    <form method='post' action={{ url_for('manager.publish') }} >
+    <table id="manager" class="table table-bordered">
+        <thead>
+            <tr>
+                <th width="20%"><center>消息標題</center></th>
+                <th width="20%"><center>消息內文</center></th>
+                <th width="20%"><center>發布時間</center></th>
+                <th colspan="2"><center>資料操作</center></th>
+            </tr>
+        </thead>
+        <tbody id="product">
+        {% for i in news_data %}
+            <tr>
+                <td><center>{{ i.消息標題 }}</center></td>
+                <td><center>{{ i.發布內文 }}</center></td>
+                <td><center>{{ i.發布時間 }}</center></td>
+                <td><center><button type="submit" value="{{i.消息標題}}" name="edit" class="btn btn-success">編輯消息</button></center></td>
+                <td><center><button type="submit" value="{{i.消息標題}}" name="delete" onclick="return (confirm('你確定要刪除 \'{{ i.消息標題 }}\' 嗎？'))" class="btn btn-danger">刪除消息</button></center></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        
+    </table>
+    </form>
+    
+    
+    </div>
+    
+    <!-- <script>
+        function have_product(){
+          alert('有使用者有使用到這筆資料，所以不能刪除');
+        }
+    </script> -->
+    
+    {% endblock content %}
