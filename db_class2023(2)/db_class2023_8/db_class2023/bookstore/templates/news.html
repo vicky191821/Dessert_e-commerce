@@ -1,0 +1,58 @@
+{% extends "frontstage.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}最新消息{% endblock title %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'No permission' %}
+  
+<script language="javascript">
+
+  alert('您沒有使用者的權限喔！');
+
+</script>
+
+
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] == 'failed' %}
+  
+<script language="javascript">
+
+  alert('有使用者有使用到這筆資料，所以不能刪除');
+
+</script>
+
+{% endif %}
+{% endwith %}
+<form method="post" action={{ url_for('bookstore.news')}}>
+<br>
+{% for i in news %}
+
+<div class="col-12 g-1">
+        <div class="card" style="margin:10px">
+        <h5 class="card-header">{{ i.標題 }}</h5>
+        <div class="card-body">
+            <p class="card-text">
+                {{ i.發布者 }}------------{{i.發布時間}}<br>
+                {{ i.內容 }}
+            </p>
+        </div>
+        </div>
+</div>
+
+{% endfor %}     
+</form>
+<!-- </div> -->
+
+
+
+
+
+{% endblock content %}

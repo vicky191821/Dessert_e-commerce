@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock head %}
+
+{% block title %}甜點電商平台{% endblock title%}
+
+{% block content%}
+<div class="background-container">
+    <div class="position-absolute top-50 start-50 translate-middle" >
+        <img class="index_pic" src="{{ url_for('static', filename='./img/home.png') }}">
+        <h1 class="index_title">甜點電商平台</h1>
+        <div class="btn_div">
+            <a href="{{ url_for('api.register') }}">
+                <button class="index_btn">註冊</button>
+            </a>
+            <a href="{{ url_for('api.login') }}">
+                <button class="index_btn">登入</button>
+            </a>
+        </div>
+    </div>
+</div>
+<style>
+    .background-container {
+        background-image: url('{{ url_for('static', filename='./img/b2.png') }}');
+        background-size: cover;
+        background-position: center;
+        height: 600px; /* 設定 div 的高度，可以根據需要調整 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: black; /* 如果文字不容易看見，可以調整文字顏色 */
+    }
+</style>
+{% endblock content%}
